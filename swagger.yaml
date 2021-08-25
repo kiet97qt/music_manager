@@ -1,0 +1,683 @@
+swagger: "2.0"
+info:
+  description: "This is a interface mobile-store server.  You can use this to test APIs"
+  version: "1.0.0"
+  title: "Swagger Mobile Store"
+  termsOfService: "http://swagger.io/terms/"
+  contact:
+    email: "apiteam@swagger.io"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+# host: "localhost:3000"
+host: "mobile-store-000.herokuapp.com"
+   
+tags:
+- name: "admin"
+  description: "Admins API"
+- name: "customer"
+  description: "Customers API"
+- name: "product"
+  description: "Products API"
+schemes:
+- "https"
+- "http"
+definitions:
+  Acount: 
+    type: "object"
+    properties:
+      email:
+        type: "string"
+        example: "EmailAddress@gmail.com"
+      password:
+        type: "string"
+        example: "EmailPassword"
+    xml:
+      name: "Acount"
+  CustomerInfo: 
+    type: "object"
+    properties:
+      email:
+        type: "string"
+        example: "EmailAddress@gmail.com"
+      password:
+        type: "string"
+        example: "EmailPassword"
+      phone:
+        type: "string"
+        example: "PhoneNumber"
+    xml:
+      name: "CustomerInfo"    
+  OrderInfo:
+    type: "object"
+    properties:
+      nameSender:
+        type: "string"
+        example: "Name"
+      mailSender:
+        type: "string"
+        example: "EmailAddress@gmail.com"
+      addressSender:
+        type: "string"
+        example: "Address"
+      phoneNumberSender:
+        type: "string"
+        example: "PhoneNumber"
+      nameReceiver:
+        type: "string"
+        example: "Name"
+      addressReceiver:
+        type: "string"
+        example: "Address"
+      phoneNumberReceiver:
+        type: "string"
+        example: "PhoneNumber"
+    xml:
+      name: "OrderInfo"        
+  Statuses:
+    type: number
+    enum: &STATUSES
+      - 1
+      - 2
+      - 3
+      - 99
+  Configuration:
+    type: "object"
+    properties:
+      body:
+        type: "object"
+        properties:
+          dimensions: 
+            type: "string"
+            example: "200 x 71.5 x 7.4 mm (5.78 x 2.81 x 0.29 in)"
+          weight:
+            type: "string"
+            example: "155 g (5.78 oz)"
+      display:
+        type: "object"
+        properties:
+          type: 
+            type: "string"
+            example: "Super Retina XDR OLED, HDR10, Dolby Vision, 123123 nits (typ)"
+          size:
+            type: "string"
+            example: "6.1 inches, 90.2 cm2 (~86.0% screen-to-body ratio)"
+      sound:
+        type: "string"
+        example: "4 output"        
+      flatform:
+        type: "array"
+        items:
+          type: "object"
+          properties:
+            os: 
+              type: "string"
+              example: "iOS 14.2, upgradable to iOS 14.4.2"
+            chipset: 
+              type: "string"
+              example: "Apple A17 Bionic (5 nm)"
+  Product:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+        example: "Xiaomi Redmi Note 10"
+      brand:
+        type: "string"
+        example: "Xiaomi"
+      discount: 
+        type: "string"
+        example: "Tặng: Cường lực - Ốp lưng - Tai nghe khi mua BHV"
+      configuration:
+        type: "array"
+        xml:
+          name: "tag"
+          wrapped: true
+        $ref: "#/definitions/Configuration"
+      description:
+        type: "string"
+        example: "description..."      
+      cost:
+        type: "number"
+        example: 5000000     
+  ProductsAdded:
+    type: "object"
+    properties:
+      products:
+        type: "array"
+        items:
+          type: "object"
+          properties:
+            productID: 
+              type: "string"
+              example: "productID"
+            quantity: 
+              type: "number"
+              example: "XXX"       
+  ProductsDeleted:
+    type: "object"
+    properties:
+      _id:
+        type: "array"
+        items:
+          type: "string"
+          example: "IdProducts.."   
+  UpdatedInfo:
+    type: "object"
+    properties:
+      nameSender:
+        type: "string"
+        example: "Name"
+      mailSender:
+        type: "string"
+        example: "EmailAddress@gmail.com"
+      addressSender:
+        type: "string"
+        example: "Address"
+      phoneNumberSender:
+        type: "string"
+        example: "PhoneNumber"
+      nameReceiver:
+        type: "string"
+        example: "Name"
+      addressReceiver:
+        type: "string"
+        example: "Address"
+      phoneNumberReceiver:
+        type: "string"
+        example: "PhoneNumber"
+      products:
+        type: "array"
+        items:
+          type: "object"
+          properties:
+            productID: 
+              type: "string"
+              example: "productID"
+            quantity: 
+              type: "number"
+              example: "XXX"               
+    xml:
+      name: "OrderInfo"         
+paths:
+  /admin/login:
+    post:
+      tags:
+      - "admin"
+      summary: "Admin login"
+      description: ""
+      operationId: "adminLogin"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "account"
+        description: "Admin account"
+        required: true
+        schema:
+          $ref: "#/definitions/Acount"
+      responses:
+        "405":
+          description: "Invalid input"
+  /admin/order:
+    get:
+      tags:
+      - "admin"
+      summary: "Admin gets orders"
+      description: ""
+      operationId: "adminGetOrders"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - in: "query"
+        name: "status"
+        enum: *STATUSES
+        description: "Status of orders which you want to get"
+      - in: "query"
+        name: "userID"
+        description: "The ID of users who you want to get orders"
+      - in: "query"
+        name: "_id"
+        description: "The ID of order"
+      responses:
+        "405":
+          description: "Invalid input"
+      security:
+      - adminToken: []          
+  /admin/order/confirm:
+    post:
+      tags:
+      - "admin"
+      summary: "Admin confirm order"
+      description: ""
+      operationId: "adminConfirm"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "id"
+        description: "Administrator confirms order after order confirmed by customer"
+        required: true
+        schema:
+          type: "object"
+          properties:
+            _id:
+              type: "string"
+              example: "6086d6d4a7461125a8fe6ae9"
+      responses:
+        "405":
+          description: "Invalid input"
+      security:
+      - adminToken: []
+  /admin/product:
+    post:
+      tags:
+      - "admin"
+      summary: "Admin creates new product"
+      description: ""
+      operationId: "adminCreateProduct"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "product informations"
+        description: "Administrator creates new product"
+        required: true
+        schema:
+          $ref: "#/definitions/Product"        
+      responses:
+        "405":
+          description: "Invalid input"
+      security:
+      - adminToken: []        
+    put:
+      tags:
+      - "admin"
+      summary: "Admin modifies product informations"
+      description: ""
+      operationId: "adminModifyProduct"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - in: "query"
+        name: "id"
+        description: "The ID of product which you want to modify"        
+      - in: "body"
+        name: "product informations"
+        description: "Administrator creates new product"
+        required: true
+        schema:
+          $ref: "#/definitions/Product"        
+      responses:
+        "405":
+          description: "Invalid input"
+      security:
+      - adminToken: []       
+    delete:
+      tags:
+      - "admin"
+      summary: "Admin deletes product"
+      description: ""
+      operationId: "adminDeleteProduct"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - in: "query"
+        name: "id"
+        description: "The ID of product which you want to delete"        
+      responses:
+        "405":
+          description: "Invalid input"
+      security:
+      - adminToken: []       
+    patch:
+      tags:
+      - "admin"
+      summary: "Admin restores product"
+      description: ""
+      operationId: "adminRestoreProduct"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - in: "query"
+        name: "id"
+        description: "The ID of product which you want to restore"        
+      responses:
+        "405":
+          description: "Invalid input"
+      security:
+      - adminToken: []  
+  /admin/product/force:
+    delete:
+      tags:
+      - "admin"
+      summary: "Admin deletes product permanently"
+      description: ""
+      operationId: "adminDeleteProductPermanently"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - in: "query"
+        name: "id"
+        description: "The ID of product which you want to delete permanently"        
+      responses:
+        "405":
+          description: "Invalid input"
+      security:
+      - adminToken: []                      
+  /customer/login:
+    post:
+      tags:
+      - "customer"
+      summary: "Customer login"
+      description: ""
+      operationId: "customerLogin"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "account"
+        description: "Customer Login"
+        required: true
+        schema:
+          $ref: "#/definitions/Acount"
+      responses:
+        "405":
+          description: "Invalid input"
+  /customer/register:
+    post:
+      tags:
+      - "customer"
+      summary: "Customer register"
+      description: ""
+      operationId: "customerRegister"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "customerInfo"
+        description: "Customer Register"
+        required: true
+        schema:
+          $ref: "#/definitions/CustomerInfo"
+      responses:
+        "405":
+          description: "Invalid input"
+  /customer/profile:
+    get:
+      tags:
+      - "customer"
+      summary: "Customer get profile"
+      description: ""
+      operationId: "customerGetProfile"
+      responses:
+        "405":
+          description: "Invalid input" 
+      security:
+      - customerToken: []
+  /customer/forgotPassword:
+    post:
+      tags:
+      - "customer"
+      summary: "Send Request To Get Password"
+      description: ""
+      operationId: "SendMailForgotPassword"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "mail"
+        description: "Customer Send Mail To Get Password"
+        required: true
+        schema:
+          type: "object"
+          properties:
+            email:
+              type: "string"
+              example: "manapro0123@gmail.com"
+      responses:
+        "405":
+          description: "Invalid input"      
+  /customer/changeForgotPassword:
+    patch:
+      tags:
+      - "customer"
+      summary: "Change Password"
+      description: ""
+      operationId: "changePassword"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "info"
+        description: "Customer changes their password"
+        required: true
+        schema:
+          type: "object"
+          properties:
+            token:
+              type: "string"
+              example: "Token in email which has been sent by system before..."
+            newPassword:
+              type: "string"
+              example: "New Password"
+      responses:
+        "405":
+          description: "Invalid input"      
+  /customer/order:
+    post:
+      tags:
+      - "customer"
+      summary: "Customer Creates Order"
+      description: ""
+      operationId: "customerCreateOrder"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "orderInfo"
+        description: "Order Informations"
+        required: true
+        schema:
+          $ref: "#/definitions/OrderInfo"
+      responses:
+        "405":
+          description: "Invalid input"
+      security:
+      - customerToken: []
+    get:
+      tags:
+      - "customer"
+      summary: "Customer Gets Order"
+      description: ""
+      operationId: "customerGetOrder"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - in: "query"
+        name: "status"
+        enum: *STATUSES
+        description: "Status of orders which you want to get"
+      responses:
+        "405":
+          description: "Invalid input"
+      security:
+      - customerToken: []
+    put:
+      tags:
+      - "customer"
+      summary: "Customer Updates Order"
+      description: ""
+      operationId: "customerUpdateOrder"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "UpdatedInfo"
+        description: "Informations Updated"
+        required: true
+        schema:
+          $ref: "#/definitions/UpdatedInfo"
+      responses:
+        "405":
+          description: "Invalid input"
+      security:
+      - customerToken: []   
+    patch:
+      tags:
+      - "customer"
+      summary: "Customer Confirms Order"
+      description: ""
+      operationId: "customerConfirmOrder"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/xml"
+      - "application/json"
+      responses:
+        "405":
+          description: "Invalid input"
+      security:
+      - customerToken: [] 
+  /customer/order/products:
+    post:
+      tags:
+      - "customer"
+      summary: "Customer Adds Product"
+      description: ""
+      operationId: "customerAddProduct"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "productAdded"
+        description: "Product Added"
+        required: true
+        schema:
+          $ref: "#/definitions/ProductsAdded"
+      responses:
+        "405":
+          description: "Invalid input"
+      security:
+      - customerToken: []
+    delete:
+      tags:
+      - "customer"
+      summary: "Customer Deletes Product"
+      description: ""
+      operationId: "customerDeleteProduct"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "productDeleted"
+        description: "Product Deleted"
+        required: true
+        schema:
+          $ref: "#/definitions/ProductsDeleted"
+      responses:
+        "405":
+          description: "Invalid input"
+      security:
+      - customerToken: []
+  /search:
+    get:
+      tags:
+      - "product"
+      summary: "Search Products By Keyword"
+      description: ""
+      operationId: "SearchProducts"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - in: "query"
+        name: "keyword"
+        description: ""
+      responses:
+        "405":
+          description: "Invalid input"
+securityDefinitions:
+  adminToken:
+    type: apiKey
+    name: Authorization
+    in: header
+  customerToken:
+    type: apiKey
+    name: Authorization
+    in: header
+externalDocs:
+  description: "Find out more about Swagger"
+  url: "http://swagger.io"
