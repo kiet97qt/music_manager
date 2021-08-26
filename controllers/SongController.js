@@ -92,7 +92,9 @@
                 case constants.RESOURCE_SUCCESSFULLY_FETCHED:
                     // Return response
                     return HttpResponseMiddleware.json(200, res, constants.SONG_SUCCESSFULLY_FETCHED, response.data);
-
+                case constants.RESOURCE_NOT_FOUND:
+                    // Return response
+                    return HttpResponseMiddleware.notFound(res, "Song", "songId", req.params.id);
                 default:
                     return HttpResponseMiddleware.internalServerError(req, res, response);
 
