@@ -12,6 +12,9 @@ const songSchema = new mongoose.Schema({
   { timestamps: true},
 );
 
-const Songs = mongoose.model("Songs", songSchema);
-
-module.exports = {Songs};
+ if(mongoose.models["Songs"]) {  // Check if the model exists
+  module.exports = mongoose.model("Songs"); // If true, only retrieve it
+ } else {
+  module.exports = mongoose.model("Songs", songSchema); // If false, define it
+ }
+ 

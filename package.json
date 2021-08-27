@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon app.js"
+    "start": "nodemon app.js",
+    "test-song": "cross-env NODE_ENV=test mocha --watch test/song.test.js"
   },
   "repository": {
     "type": "git",
@@ -24,11 +25,13 @@
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
+    "mocha": "^9.1.0",
     "mongodb": "^4.1.1",
     "mongoose": "^6.0.0",
     "mongoose-delete": "^0.5.3",
     "nodemailer": "^6.6.3",
     "nodemon": "^2.0.12",
+    "supertest": "^6.1.6",
     "swagger-tools": "^0.10.4",
     "swagger-ui-express": "^4.1.6",
     "yamljs": "^0.3.0"

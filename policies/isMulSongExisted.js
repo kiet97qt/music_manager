@@ -11,7 +11,6 @@
     async isMulSongExisted(req, res, next) {
      
         let response = await SongMiddleware.getSongsByIds(req.body.ids);
-        console.log("response",response)
         switch (response.status) {
             case constants.RESOURCES_SUCCESSFULLY_FETCHED :
                 console.log("Policies::isMulSongExisted() - policy validated");

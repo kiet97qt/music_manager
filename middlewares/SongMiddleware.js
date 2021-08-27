@@ -1,4 +1,4 @@
-const {Songs} = require("../models/core/song");
+const Songs = require("../models/core/song");
 const mongoose = require("mongoose");
 const constants = require("../constants");
 const _ = require("lodash");
@@ -128,7 +128,6 @@ const _ = require("lodash");
 
         try {
             const songs = await Songs.find({ '_id': { $in: songsIds } });
-            console.log("songs",songs)
             //  if a given id in array of ids doesnt exist in db , return not found error
             if (songsIds.length !== songs.length){
                 let resourcesNotFound = songs.length?_.difference(songsIds,_.map(songs,'id')):songsIds;
