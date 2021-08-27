@@ -1,13 +1,13 @@
 const router = require("express").Router();
 const SongController = require("../controllers/SongController");
-const {isSongExisted} = require("../policies/isSongExisted");
-const {isMulSongExisted} = require("../policies/isMulSongExisted");
+const {isSongExisted} = require("../middlewares/isSongExisted");
+const {isMulSongExisted} = require("../middlewares/isMulSongExisted");
 
-router.post("/", SongController.createSong);
-router.get("/", SongController.getAllSongs);
-router.get("/songId/:id", SongController.getSongById);
-router.put("/songId/:id", isSongExisted, SongController.updateSongById);
-router.delete("/songId/:id", isSongExisted, SongController.deleteSongById);
-router.delete("/",isMulSongExisted, SongController.deleteSongsByIds);
+router.post("/song", SongController.createSong);
+router.get("/songs", SongController.getAllSongs);
+router.get("/song/:id", SongController.getSongById);
+router.put("/song/:id", isSongExisted, SongController.updateSongById);
+router.delete("/song/:id", isSongExisted, SongController.deleteSongById);
+router.delete("/songs",isMulSongExisted, SongController.deleteSongsByIds);
 
 module.exports = router;

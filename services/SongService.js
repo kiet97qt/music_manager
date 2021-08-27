@@ -1,4 +1,4 @@
-const Songs = require("../models/core/song");
+const Songs = require("../models/core/Song");
 const mongoose = require("mongoose");
 const constants = require("../constants");
 const _ = require("lodash");

@@ -1,7 +1,7 @@
 const request = require("supertest")
 const app = require("../app");
 mongoose = require('mongoose');
-const SongMiddleware = require("../middlewares/SongMiddleware");
+const SongService = require("../services/SongService");
 require('dotenv')
 
 describe('Song Test', function() {
@@ -13,7 +13,7 @@ describe('Song Test', function() {
             link: "https://youtube.com/whistle",
             additional: "additional..."
         }
-        SongMiddleware.createSong(attributes).then((createdSong) => {
+        SongService.createSong(attributes).then((createdSong) => {
             process.env.songId = createdSong.data._id;
             done() 
         })       
@@ -41,7 +41,7 @@ describe('Song Test', function() {
     describe('Reading Song', function() {
         it('Should get all Songs created', function(done) {
           request(app)
-            .get('/song')
+            .get('/songs')
             .set('Accept', 'application/json')
             .expect('Content-Type', /json/)
             .expect(200, done);
@@ -49,7 +49,7 @@ describe('Song Test', function() {
 
         it('Should get Song created by ID', function(done) {
             request(app)
-              .get(`/song/songId/${process.env.songId}`)
+              .get(`/song/${process.env.songId}`)
               .set('Accept', 'application/json')
               .expect('Content-Type', /json/)
               .expect(200)
@@ -63,7 +63,7 @@ describe('Song Test', function() {
 
         it('Should not get an existed Song', function(done) {
             request(app)
-              .get(`/song/songId/61288187d75244111ac5212f`)
+              .get(`/song/61288187d75244111ac5212f`)
               .set('Accept', 'application/json')
               .expect('Content-Type', /json/)
               .expect(404)
@@ -86,7 +86,7 @@ describe('Song Test', function() {
                 additional: "additional..."
             }
             request(app)
-                .put(`/song/songId/${process.env.songId}`)
+                .put(`/song/${process.env.songId}`)
                 .send(attributesModified)
                 .set('Accept', 'application/json')
                 .expect('Content-Type', /json/)
@@ -102,7 +102,7 @@ describe('Song Test', function() {
                 additional: "additional..."
             }
             request(app)
-                .put(`/song/songId/61288187d75244111ac5212f`)
+                .put(`/song/61288187d75244111ac5212f`)
                 .send(attributesModified)
                 .set('Accept', 'application/json')
                 .expect('Content-Type', /json/)
@@ -114,7 +114,7 @@ describe('Song Test', function() {
     describe('Deleting Song', function() {
         it('Should delete Song by Id successfully', function(done) {
            request(app)
-               .delete(`/song/songId/${process.env.songId}`)
+               .delete(`/song/${process.env.songId}`)
                .set('Accept', 'application/json')
                .expect('Content-Type', /json/)
                .expect(200, done);
@@ -122,7 +122,7 @@ describe('Song Test', function() {
 
        it('Should not delete Song by Id successfully with unexisted ID', function(done) {
         request(app)
-            .delete(`/song/songId/${process.env.songId}`)
+            .delete(`/song/${process.env.songId}`)
             .set('Accept', 'application/json')
             .expect('Content-Type', /json/)
             .expect(404, done);
@@ -136,9 +136,9 @@ describe('Song Test', function() {
                 link: "https://youtube.com/whistle",
                 additional: "additional..."
             }
-            SongMiddleware.createSong(attributes).then((createdSong) => {
+            SongService.createSong(attributes).then((createdSong) => {
                 request(app)
-                .delete(`/song`)
+                .delete(`/songs`)
                 .send({
                     ids:[createdSong.data.id]
                 })
@@ -150,7 +150,7 @@ describe('Song Test', function() {
 
         it('Should not delete Mul Songs with unexisted IDs', function(done) {
             request(app)
-            .delete(`/song`)
+            .delete(`/songs`)
             .send({
                 ids:["61288187d75244111ac5212f"]
             })

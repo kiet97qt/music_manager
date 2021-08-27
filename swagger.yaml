@@ -65,7 +65,8 @@ paths:
           $ref: "#/definitions/Song"        
       responses:
         "201":
-          description: "The song has been successfully created"     
+          description: "The song has been successfully created"  
+  /songs:   
     get:
       tags:
       - "song"
@@ -105,7 +106,7 @@ paths:
           description: "The songs has been successfully deleted."
         "404":  
           description: "Resource Not Found."
-  /song/songId/{id}:
+  /song/{id}:
     get:
       tags:
       - "song"
