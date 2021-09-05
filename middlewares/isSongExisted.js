@@ -6,6 +6,7 @@
  const constants = require("../constants");
  const SongService = require("../services/SongService");
  const HttpResponseService = require("../services/HttpResponseService");
+ const logger = require('../winston');
 
  module.exports = {
     async isSongExisted(req, res, next) {
@@ -14,7 +15,7 @@
     
         switch (response.status) {
             case constants.RESOURCE_SUCCESSFULLY_FETCHED :
-                console.log("Policies::isSongExisted() - policy validated");
+                logger.info('Policies::isSongExisted() - policy validated');
                 return next();
             case constants.RESOURCE_NOT_FOUND :
                 return HttpResponseService.notFound(res, "Song", "songId", req.params.id);

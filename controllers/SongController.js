@@ -2,7 +2,7 @@
  const constants      = require("../constants");
  const SongService = require("../services/SongService");
  const HttpResponseService = require("../services/HttpResponseService");
-
+ const logger = require('../winston');
  const controllerName = "SongController";
  
  module.exports = {
@@ -22,12 +22,12 @@
          try {
 
              // Inside create the song by service
-
              let response = await SongService.createSong(req.body);
 
              switch (response.status) {
  
                  case constants.RESOURCE_SUCCESSFULLY_CREATED:
+                    logger.info('Create Song successfully');
                      // Return the response
                      return HttpResponseService.json(201, res, constants.SONG_SUCCESSFULLY_CREATED, response.data);
  
@@ -59,6 +59,7 @@
              switch (response.status) {
  
                  case constants.RESOURCES_SUCCESSFULLY_FETCHED:
+                    logger.info('Get all Songs successfully');
                      return HttpResponseService.json(200, res, constants.RESOURCES_SUCCESSFULLY_FETCHED, response.data);
  
                  default:
@@ -90,6 +91,7 @@
             switch (response.status) {
 
                 case constants.RESOURCE_SUCCESSFULLY_FETCHED:
+                    logger.info('Get Song successfully');
                     // Return response
                     return HttpResponseService.json(200, res, constants.SONG_SUCCESSFULLY_FETCHED, response.data);
                 case constants.RESOURCE_NOT_FOUND:
@@ -123,6 +125,7 @@
             switch (response.status) {
 
                 case constants.RESOURCES_SUCCESSFULLY_DELETED:
+                    logger.info('Delete Songs successfully');
                     // Return response
                     return HttpResponseService.json(200, res, constants.SONGS_SUCCESSFULLY_DELETED, response.data);
 
@@ -154,6 +157,7 @@
             switch (response.status) {
 
                 case constants.RESOURCE_SUCCESSFULLY_DELETED:
+                    logger.info('Delete Song successfully');
                     // Return response
                     return HttpResponseService.json(200, res, constants.SONG_SUCCESSFULLY_DELETED, response.data);
 
@@ -191,6 +195,7 @@
             switch (responseUpdate.status) {
 
                 case constants.RESOURCE_SUCCESSFULLY_UPDATED:
+                    logger.info('Update Song successfully');
                     return HttpResponseService.json(200, res, constants.SONG_SUCCESSFULLY_UPDATED, responseUpdate.data);
 
                 default:

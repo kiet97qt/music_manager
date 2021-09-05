@@ -70,7 +70,6 @@ const _ = require("lodash");
         try {
 
             let allSongs = await Songs.find({});
-
             return {
                 status: constants.RESOURCES_SUCCESSFULLY_FETCHED,
                 data: allSongs
